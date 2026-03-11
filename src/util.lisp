@@ -75,7 +75,7 @@
 ;;; SHA-256 Implementation
 ;;; ============================================================================
 
-(defconstant +sha256-k+
+(defparameter *sha256-k*
   #(#x428a2f98 #x71374491 #xb5c0fbcf #xe9b5dba5
     #x3956c25b #x59f111f1 #x923f82a4 #xab1c5ed5
     #xd807aa98 #x12835b01 #x243185be #x550c7dc3
@@ -94,7 +94,7 @@
     #x90befffa #xa4506ceb #xbef9a3f7 #xc67178f2)
   "SHA-256 round constants.")
 
-(defconstant +sha256-h0+
+(defparameter *sha256-h0*
   #(#x6a09e667 #xbb67ae85 #x3c6ef372 #xa54ff53a
     #x510e527f #x9b05688c #x1f83d9ab #x5be0cd19)
   "SHA-256 initial hash values.")
@@ -119,19 +119,19 @@
   (declare (type (unsigned-byte 32) x y z))
   (logxor (logand x y) (logand x z) (logand y z)))
 
-(defun sha256-Sigma0 (x)
+(defun sha256-big-sigma0 (x)
   (declare (type (unsigned-byte 32) x))
   (logxor (sha256-rotr x 2) (sha256-rotr x 13) (sha256-rotr x 22)))
 
-(defun sha256-Sigma1 (x)
+(defun sha256-big-sigma1 (x)
   (declare (type (unsigned-byte 32) x))
   (logxor (sha256-rotr x 6) (sha256-rotr x 11) (sha256-rotr x 25)))
 
-(defun sha256-sigma0 (x)
+(defun sha256-small-sigma0 (x)
   (declare (type (unsigned-byte 32) x))
   (logxor (sha256-rotr x 7) (sha256-rotr x 18) (ldb (byte 32 0) (ash x -3))))
 
-(defun sha256-sigma1 (x)
+(defun sha256-small-sigma1 (x)
   (declare (type (unsigned-byte 32) x))
   (logxor (sha256-rotr x 17) (sha256-rotr x 19) (ldb (byte 32 0) (ash x -10))))
 
@@ -166,9 +166,9 @@
                     (aref block (+ (* i 4) 3)))))
     (loop for i from 16 below 64
           do (setf (aref w i)
-                   (sha256-add32 (sha256-sigma1 (aref w (- i 2)))
+                   (sha256-add32 (sha256-small-sigma1 (aref w (- i 2)))
                                  (aref w (- i 7))
-                                 (sha256-sigma0 (aref w (- i 15)))
+                                 (sha256-small-sigma0 (aref w (- i 15)))
                                  (aref w (- i 16)))))
     ;; Working variables
     (let ((a (aref h 0)) (b (aref h 1)) (c (aref h 2)) (d (aref h 3))
@@ -176,11 +176,17 @@
       (declare (type (unsigned-byte 32) a b c d e f g hh))
       ;; Main loop
       (dotimes (i 64)
-        (let* ((t1 (sha256-add32 hh (sha256-Sigma1 e) (sha256-ch e f g)
-                                 (aref +sha256-k+ i) (aref w i)))
-               (t2 (sha256-add32 (sha256-Sigma0 a) (sha256-maj a b c))))
-          (setf hh g g f f e (sha256-add32 d t1)
-                d c c b b a a (sha256-add32 t1 t2))))
+        (let* ((t1 (sha256-add32 hh (sha256-big-sigma1 e) (sha256-ch e f g)
+                                 (aref *sha256-k* i) (aref w i)))
+               (t2 (sha256-add32 (sha256-big-sigma0 a) (sha256-maj a b c))))
+          (setf hh g
+                g f
+                f e
+                e (sha256-add32 d t1)
+                d c
+                c b
+                b a
+                a (sha256-add32 t1 t2))))
       ;; Update hash
       (setf (aref h 0) (sha256-add32 (aref h 0) a)
             (aref h 1) (sha256-add32 (aref h 1) b)
@@ -198,7 +204,7 @@
                       (string-to-octets message)
                       message))
          (padded (sha256-pad-message message))
-         (h (copy-seq +sha256-h0+))
+         (h (copy-seq *sha256-h0*))
          (result (make-array 32 :element-type '(unsigned-byte 8))))
     ;; Process each 64-byte block
     (loop for offset from 0 below (length padded) by 64
