@@ -4,7 +4,7 @@
 
 (asdf:defsystem #:cl-bls-signatures
   :description "BLS12-381 aggregate signatures: sign, verify, aggregate, threshold"
-  :author "CLPIC Contributors"
+  :author "Parkian Company LLC"
   :license "MIT"
   :version "1.0.0"
   :serial t
