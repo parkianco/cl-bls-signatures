@@ -1,0 +1,22 @@
+cl-bls-signatures
+=================
+
+This library was extracted from the CLPIC (Common Lisp P2P Intellectual Property
+Chain) project.
+
+Original Source: https://github.com/[username]/clpic
+Source Module: src/crypto/bls/
+
+The BLS signature implementation follows:
+- IETF draft-irtf-cfrg-bls-signature-05 (BLS Signatures)
+- IETF draft-irtf-cfrg-hash-to-curve-16 (Hash to Curve)
+- Ethereum 2.0 BLS specification
+
+This is a standalone extraction with no external dependencies.
+All cryptographic primitives (SHA-256, HMAC-SHA256) are implemented
+natively in Common Lisp.
+
+Note: This implementation uses simulated curve operations for demonstration
+purposes. For production use with real cryptographic security guarantees,
+the curve arithmetic should be replaced with proper BLS12-381 field and
+group operations.

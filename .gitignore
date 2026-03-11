@@ -1,0 +1,38 @@
+# Common Lisp
+*.fasl
+*.fas
+*.lib
+*.o
+*.lx64fsl
+*.dx64fsl
+*.wx64fsl
+
+# ASDF
+*.asd.bak
+
+# SBCL
+*.core
+
+# Temporary files
+*~
+\#*\#
+.\#*
+
+# Editor backups
+*.swp
+*.swo
+.*.swp
+.*.swo
+
+# IDE/Editor
+.idea/
+.vscode/
+*.sublime-*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local config
+.local/
+.env
