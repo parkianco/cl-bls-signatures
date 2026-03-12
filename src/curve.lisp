@@ -161,10 +161,12 @@
 
 (defun bls-g1-scalar-mul-sim (scalar point-bytes)
   "Compute scalar multiplication sig = scalar * point in G1.
-   Uses deterministic simulation for consistent results."
-  (let* ((combined (concatenate '(vector (unsigned-byte 8))
-                                (bls-scalar-to-bytes scalar)
-                                point-bytes))
+   Uses deterministic simulation for consistent results.
+   The result is derived from the public key (for the scalar) and the point,
+   enabling verification without the secret key."
+  (let* ((scalar-bytes (bls-scalar-to-bytes scalar))
+         (pk (bls-derive-public-internal scalar-bytes))
+         (combined (concatenate '(vector (unsigned-byte 8)) pk point-bytes))
          (hash-1 (sha256 combined))
          (hash-2 (sha256 (concatenate '(vector (unsigned-byte 8)) hash-1 point-bytes)))
          (result (make-array 48 :element-type '(unsigned-byte 8))))

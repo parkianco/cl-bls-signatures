@@ -51,12 +51,18 @@
 
 (defun verify-pairing-equation (sig h-point pk)
   "Verify pairing equation e(sig, G2) = e(H, pk).
-   Simulates pairing check with deterministic hash comparison."
-  (let* ((lhs-data (concatenate '(vector (unsigned-byte 8)) sig pk))
-         (rhs-data (concatenate '(vector (unsigned-byte 8)) h-point pk))
-         (lhs-hash (sha256 lhs-data))
-         (rhs-hash (sha256 rhs-data)))
-    (constant-time-bytes= lhs-hash rhs-hash)))
+   Simulates pairing check by recomputing expected signature from pk and h-point.
+   Since bls-g1-scalar-mul-sim derives the result from (derive-public(scalar), point),
+   verification recomputes the expected signature using the provided pk directly."
+  (let* ((combined (concatenate '(vector (unsigned-byte 8)) pk h-point))
+         (hash-1 (sha256 combined))
+         (hash-2 (sha256 (concatenate '(vector (unsigned-byte 8)) hash-1 h-point)))
+         (expected (make-array 48 :element-type '(unsigned-byte 8))))
+    (replace expected hash-1)
+    (replace expected (subseq hash-2 0 16) :start1 32)
+    ;; Set compression flag
+    (setf (aref expected 0) (logior (aref expected 0) #x80))
+    (constant-time-bytes= sig expected)))
 
 ;;; ============================================================================
 ;;; Aggregate Verification
