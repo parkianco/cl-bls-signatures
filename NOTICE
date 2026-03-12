@@ -4,7 +4,6 @@ cl-bls-signatures
 This library was extracted from the CLPIC (Common Lisp P2P Intellectual Property
 Chain) project.
 
-Original Source: https://github.com/[username]/clpic
 Source Module: src/crypto/bls/
 
 The BLS signature implementation follows:
