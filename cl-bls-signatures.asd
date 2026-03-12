@@ -28,4 +28,6 @@
     :components
     ((:file "test-bls-sig"))))
   :perform (test-op (o c)
-             (uiop:symbol-call :cl-bls-signatures/test :run-tests)))
+             (let ((result (uiop:symbol-call :cl-bls-signatures/test :run-tests)))
+               (unless result
+                 (error "Tests failed")))))
