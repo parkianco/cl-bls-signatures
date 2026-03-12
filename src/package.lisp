@@ -54,6 +54,15 @@
    #:+bls-dst-sign+
    #:+bls-dst-pop+
 
+   ;; Re-export util functions
+   #:string-to-octets
+   #:octets-to-string
+   #:bytes-to-integer
+   #:integer-to-bytes
+   #:sha256
+   #:hmac-sha256
+   #:constant-time-bytes=
+
    ;; Types
    #:bls-keypair
    #:bls-keypair-p
