@@ -6,7 +6,11 @@
 (defpackage #:cl-bls-signatures
   (:use #:cl)
   (:export
-   #:with-bls-signatures-timing
+   #:identity-list
+   #:flatten
+   #:map-keys
+   #:now-timestamp
+#:with-bls-signatures-timing
    #:bls-signatures-batch-process
    #:bls-signatures-health-check#:cl-bls-signatures-error
    #:cl-bls-signatures-validation-error#:init
