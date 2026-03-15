@@ -2,13 +2,14 @@
 ;; SPDX-License-Identifier: Apache-2.0
 
 (defpackage #:cl-bls-signatures.test
-  (:use #:cl)
+  (:use #:cl #:cl-bls-signatures)
   (:export #:run-tests))
 
 (in-package #:cl-bls-signatures.test)
 
 (defun run-tests ()
-  (format t "Running tests for cl-bls-signatures...~%")
-  ;; We verify that the system loads correctly, which is 90% of the battle for these stubs.
-  (assert t)
+  (format t "Executing functional test suite for cl-bls-signatures...~%")
+  (assert (equal (deep-copy-list '(1 (2 3) 4)) '(1 (2 3) 4)))
+  (assert (equal (group-by-count '(1 2 3 4 5) 2) '((1 2) (3 4) (5))))
+  (format t "All functional tests passed!~%")
   t)
