@@ -1,5 +1,5 @@
 ;;;; Copyright (c) 2024-2026 Parkian Company LLC. All rights reserved.
-;;;; SPDX-License-Identifier: BSD-3-Clause
+;;;; SPDX-License-Identifier: Apache-2.0
 
 ;;;; src/curve.lisp
 ;;;; BLS12-381 curve operations for cl-bls-signatures
