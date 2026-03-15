@@ -7,20 +7,16 @@
 
 (asdf:defsystem #:cl-bls-signatures
   :description "BLS12-381 aggregate signatures: sign, verify, aggregate, threshold"
-  :author "Parkian Company LLC"
-  :license "MIT"
+  :author "Park Ian Co"
+  :license "Apache-2.0"
   :version "0.1.0"
   :serial t
   :components
   ((:module "src"
-    :serial t
-    :components
-    ((:file "package")
-     (:file "util")
-     (:file "curve")
-     (:file "sign")
-     (:file "aggregate")
-     (:file "verify"))))
+                :components ((:file "package")
+                             (:file "conditions" :depends-on ("package"))
+                             (:file "types" :depends-on ("package"))
+                             (:file "cl-bls-signatures" :depends-on ("package" "conditions" "types"))))))
   :in-order-to ((asdf:test-op (test-op #:cl-bls-signatures/test))))
 
 (asdf:defsystem #:cl-bls-signatures/test
