@@ -6,6 +6,9 @@
 (defpackage #:cl-bls-signatures
   (:use #:cl)
   (:export
+   #:bls-signatures-execute
+   #:bls-signatures-context
+   #:initialize-bls-signatures
    #:memoize-function
    #:deep-copy-list
    #:group-by-count
